@@ -250,7 +250,7 @@ FROM trips
 WHERE (to_station_id IS NULL AND from_station_id IS NULL);
 ```
 
- | max | min | stddev | avg
+ row | max | min | stddev | avg
  --- | --- | --- | --- | ---
  1 | 6382030 | 0 | 11757.7... | 1082.5...
 
@@ -260,7 +260,7 @@ WHERE (to_station_id IS NULL AND from_station_id IS NULL);
 FROM trips
 WHERE (to_station_id IS NOT NULL AND from_station_id IS NOT NULL)
  ```
- | max | min | stddev | avg
+ row | max | min | stddev | avg
  --- | --- | --- | --- | ---
  1 | 550777 | 60 | 1510.9... | 945.7...
 
