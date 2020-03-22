@@ -1,5 +1,9 @@
 # Homework
 
+## Opening note
+
+This is about data cleanup, and a real world dataset, so **it’s okay to do your best and skip inconsistencies in the data that are hard to fix**. It’s valuable to figure out what the issues in the data are and I want you to challenge yourself to write queries that let you answer questions about the data, but **if you’re stuck on a station that doesn’t make you can just throw it away and move on, just note it and only come back later if you have time and want to.**
+
 ## Instructions 
 
 Clone this repo and make a PR with your answers to the questions below, and tag your reviewer in the PR.
