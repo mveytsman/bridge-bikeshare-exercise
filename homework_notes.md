@@ -379,7 +379,7 @@ THEN
   to_timestamp(start_time_str, 'DD/MM/YYYY HH24:MI') 
 WHEN original_filename = 'Bikeshare Ridership (2017 Q4).csv'
 THEN
-    to_timestamp(start_time_str, 'FMMM/DD/YYYY HH24:MI:SS')
+    to_timestamp(start_time_str, 'FMMM/DD/YY HH24:MI:SS')
 ELSE 
   to_timestamp(start_time_str, 'FMMM/DD/YYYY HH24:MI') 
 END,
@@ -390,11 +390,10 @@ THEN
   to_timestamp(end_time_str, 'DD/MM/YYYY HH24:MI') 
 WHEN original_filename = 'Bikeshare Ridership (2017 Q4).csv'
 THEN
-    to_timestamp(end_time_str, 'FMMM/DD/YYYY HH24:MI:SS')
+    to_timestamp(start_time_str, 'FMMM/DD/YY HH24:MI:SS')
 ELSE 
   to_timestamp(end_time_str, 'FMMM/DD/YYYY HH24:MI') 
 END
-
 
 ```
 
@@ -407,9 +406,59 @@ END
 Using the table you made in part 1 and the dates you added in part 2, let's answer some questions about the bike share data
 
 1) Build a mini-report that does a breakdown of number of trips by month
+
+``` sql
+WITH seasons AS (
+SELECT CASE 
+WHEN date_part('month', start_time) = 12 OR date_part('month', start_time) = 1 OR date_part('month', start_time) = 2 
+THEN 'Winter'
+WHEN date_part('month', start_time) = 3 OR date_part('month', start_time) = 4 OR date_part('month', start_time) = 5 
+THEN 'Spring'
+WHEN date_part('month', start_time) = 6 OR date_part('month', start_time) = 7 OR date_part('month', start_time) = 8 
+THEN 'Summer'
+WHEN date_part('month', start_time) = 9 OR date_part('month', start_time) = 10 OR date_part('month', start_time) = 11
+THEN 'Fall'
+END as season
+FROM trips
+)
+
+SELECT season, COUNT(*) from seasons GROUP BY season
+```
+
 2) Build a mini-report that does a breakdown of number trips by time of day of their start and end times
+
+``` sql
+WITH time_of_day AS (
+SELECT CASE 
+WHEN date_part('hour', start_time) >= 5 AND date_part('hour', start_time) < 12
+THEN 'Morning'
+WHEN date_part('hour', start_time) >= 12 AND date_part('hour', start_time) < 17
+THEN 'Afternoon'
+WHEN date_part('hour', start_time) >= 17 AND date_part('hour', start_time) < 21 
+THEN 'Evening'
+WHEN date_part('hour', start_time) >= 21 OR date_part('hour', start_time) < 5
+THEN 'Night'
+END as time_of_day
+FROM trips
+)
+
+SELECT time_of_day, COUNT(*) from time_of_day GROUP BY time_of_day
+```
 3) What are the most popular stations to bike to in the summer?
+
+``` sql
+SELECT stations.name, COUNT(trips.id) from trips INNER JOIN stations on trips.to_station_id = stations.id WHERE date_part('month', start_time) = 9 OR date_part('month', start_time) = 10 OR date_part('month', start_time) = 11 GROUP BY stations.id ORDER BY count DESC LIMIT 10;
+
+```
+
 4) What are the most popular stations to bike from in the winter?
+
+``` sql
+SELECT stations.name, COUNT(trips.id) from trips INNER JOIN stations on trips.from_station_id = stations.id WHERE date_part('month', start_time) = 12 OR date_part('month', start_time) = 1 OR date_part('month', start_time) = 2 GROUP BY stations.id ORDER BY count DESC LIMIT 10;
+
+```
 5) Come up with a question that's interesting to you about this data that hasn't been asked and answer it.
+
+
 
 
